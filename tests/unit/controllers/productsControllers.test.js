@@ -7,7 +7,7 @@ const { productsController } = require('../../../src/controllers');
 const errorMessages = require('../../../src/helpers/errorMessages');
 const statusCode = require('../../../src/helpers/statusCode');
 const { productsService } = require('../../../src/services');
-const { serviceReturn, serviceReturnById } = require('../mocks/productsModel.mock');
+const { serviceReturn, serviceReturnById, createProduct, serviceProductInsert } = require('../mocks/productsModel.mock');
 
 chai.use(sinonChai);
 
@@ -17,7 +17,9 @@ describe('Testa controlller de produtos', function () {
       const res = {};
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
-      sinon.stub(productsService, 'serviceFindAll').resolves(serviceReturn);
+      sinon
+        .stub(productsService, 'serviceFindAll')
+        .resolves(serviceReturn);
 
       await productsController.controllerFindAll({}, res);
       
@@ -26,10 +28,13 @@ describe('Testa controlller de produtos', function () {
     });
     it('Retorna um produto pelo seu Id', async function () {
       const res = {};
-      const req = { params: { id: 999 }}
+      const req = { params: { id: '1' } };
+      
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
-      sinon.stub(productsService, 'serviceFindById').resolves(serviceReturnById);
+      sinon
+        .stub(productsService, 'serviceFindById')
+        .resolves(serviceReturnById);
 
       await productsController.controllerFindById(req, res);
 
@@ -49,6 +54,23 @@ describe('Testa controlller de produtos', function () {
 
       expect(res.status).to.have.been.calledOnceWith(statusCode.NOT_FOUND);
       expect(res.json).to.have.been.calledOnceWith(errorMessages.notFoundData);
+    });
+  });
+  describe('Teste de criação de produto', function () {
+    it.only('criando um novo produto com sucesso ', async function () {
+      const res = {};
+      const req = { body: createProduct, };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsService, 'serviceInsert').resolves({
+        status: statusCode.CREATED,
+        message: serviceProductInsert,
+      });
+
+      await productsController.controllerInsert(req, res);
+
+      expect(res.status).to.have.been.calledOnceWith(statusCode.CREATED);
+      expect(res.json).to.have.been.calledOnceWith(serviceProductInsert);
     });
   });
   afterEach(() => {

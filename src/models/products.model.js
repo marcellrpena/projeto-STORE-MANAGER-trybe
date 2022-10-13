@@ -2,7 +2,7 @@ const connection = require('./connection');
 
 const findAll = async () => {
   const [result] = await connection.execute(
-    'SELECT * FROM StoreManager.products',
+    'SELECT * FROM StoreManager.products ORDER BY id ASC',
   );
   return result;
 };
@@ -15,7 +15,16 @@ const findById = async (productId) => {
   return result;
 };
 
+const productInsert = async (product) => {
+  const [{ insertId }] = await connection.execute(
+    'INSERT INTO StoreManager.products (name) VALUES (?)',
+    [product.name],
+  );
+  return insertId;
+};
+
 module.exports = {
   findAll,
   findById,
+  productInsert,
 };

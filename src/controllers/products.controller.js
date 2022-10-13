@@ -14,7 +14,13 @@ const controllerFindById = async (req, res) => {
   res.status(result.status).json(result.message);
 };
 
+const controllerInsert = async (req, res) => {
+  const product = await productsService.serviceInsert({ ...req.body });
+  res.status(product.status).json(product.message);
+};
+
 module.exports = {
   controllerFindAll,
   controllerFindById,
+  controllerInsert,
 };
