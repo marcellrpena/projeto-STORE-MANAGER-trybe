@@ -24,7 +24,7 @@ describe('Model de produtos', function () {
     });
   });
   describe('Criando novos produtos', function () {
-    it.only('criando um novo produto', async function () {
+    it('criando um novo produto', async function () {
       sinon.stub(connection, 'execute').resolves([{ insertId: 99 }]);
 
       const result = await productsModel.productInsert(createProduct);

@@ -1,7 +1,7 @@
 const errorMessages = require('../helpers/errorMessages');
 const statusCode = require('../helpers/statusCode');
 const { productsModel } = require('../models');
-const { validateId } = require('./validations/validationsInputValues');
+const { validateId, validateProduct } = require('./validations/validationsInputValues');
 
 const serviceFindAll = async () => {
   const result = await productsModel.findAll();
@@ -15,7 +15,7 @@ const serviceFindAll = async () => {
 const serviceFindById = async (productId) => {
   // primeiro filtro valida se o Id digitado é valido
   const validationId = validateId(productId);
-  if (validationId.type) return validationId;
+  if (validationId.status) return validationId;
 
   // segundo filtro verifica se o ID existe no banco de dados 
   const result = await productsModel.findById(productId);
@@ -26,6 +26,9 @@ const serviceFindById = async (productId) => {
 
 const serviceInsert = async (product) => {
   const { name } = product;
+  const validateBody = validateProduct(product);
+
+  if (validateBody.status) return validateBody;
 
   const newProductId = await productsModel.productInsert({ name });
   const newProduct = await productsModel.findById(newProductId);

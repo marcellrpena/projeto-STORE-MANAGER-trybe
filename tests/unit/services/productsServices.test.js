@@ -4,7 +4,7 @@ const errorMessages = require("../../../src/helpers/errorMessages");
 const statusCode = require("../../../src/helpers/statusCode");
 const { productsModel } = require("../../../src/models");
 const { productsService } = require("../../../src/services");
-const { productsFromDB, serviceProductInsert, createProduct } = require("../mocks/productsModel.mock");
+const { productsFromDB, serviceProductInsert, createProduct, productValidation } = require("../mocks/productsModel.mock");
 
 describe('Testando product service', function () {
   describe('Listando produtos', function () {
@@ -29,7 +29,7 @@ describe('Testando product service', function () {
     it('retorna um erro caso receba um ID inválido', async function () {
       const result = await productsService.serviceFindById('a');
 
-      expect(result.message).to.be.deep.equal({ "message": "Product not found" });
+      expect(result.message).to.be.deep.equal(errorMessages.notFoundData);
       expect(result.status).to.be.equal(statusCode.NOT_FOUND);
     });
     it('Caso de falha, service retorna uma menssagem de ERRO e status 404', async function () {
@@ -42,7 +42,7 @@ describe('Testando product service', function () {
     });
   });
   describe('Criando novos produtos', function () {
-    it('criando um novo produto', async function () {
+    it('caso tudo esteja correto cria um produto', async function () {
       sinon.stub(productsModel, 'productInsert').resolves(4);
       sinon.stub(productsModel, 'findById').resolves(serviceProductInsert)
 
@@ -50,6 +50,18 @@ describe('Testando product service', function () {
 
       expect(result.status).to.equal(statusCode.CREATED);
       expect(result.message).to.deep.equal(serviceProductInsert);
+    });
+    it('Será validado que não é possível realizar operações sem o campo name', async function () {
+      const result = await productsService.serviceInsert({});
+
+      expect(result.status).to.equal(statusCode.BAD_REQUEST);
+      expect(result.message).to.deep.equal(productValidation[0].message);
+    });
+    it('Será validado que não é possível realizar operações com o campo name menor que 5 caracteres', async function () {
+      const result = await productsService.serviceInsert({ name: 'marc' });
+
+      expect(result.status).to.equal(statusCode.UNPROCESSABLE_ENTITY);
+      expect(result.message).to.deep.equal(productValidation[1].message);
     });
   });
   afterEach(() => {

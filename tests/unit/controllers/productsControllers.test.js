@@ -57,7 +57,7 @@ describe('Testa controlller de produtos', function () {
     });
   });
   describe('Teste de criação de produto', function () {
-    it.only('criando um novo produto com sucesso ', async function () {
+    it('criando um novo produto com sucesso ', async function () {
       const res = {};
       const req = { body: createProduct, };
       res.status = sinon.stub().returns(res);
