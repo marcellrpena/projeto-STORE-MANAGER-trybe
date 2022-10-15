@@ -17,7 +17,7 @@ const openNewSale = async () => {
 
 const findSalesProductById = async (id) => {
   const [result] = await connection.execute(
-    'SELECT * FROM StoreManager.sales_products WHERE sale_id = ?',
+    'SELECT product_id, quantity FROM StoreManager.sales_products WHERE sale_id = ?',
     [id],
   );
   return result;
