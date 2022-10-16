@@ -48,12 +48,12 @@ describe('Testa controlller de produtos', function () {
       res.json = sinon.stub().returns();
       sinon.stub(productsService, 'serviceFindById').resolves({
         status: 404,
-        message: errorMessages.notFoundData,
+        message: errorMessages.notFoundData('Product'),
       });
       await productsController.controllerFindById(req, res);
 
       expect(res.status).to.have.been.calledOnceWith(statusCode.NOT_FOUND);
-      expect(res.json).to.have.been.calledOnceWith(errorMessages.notFoundData);
+      expect(res.json).to.have.been.calledOnceWith(errorMessages.notFoundData('Product'));
     });
   });
   describe('Teste de criação de produto', function () {

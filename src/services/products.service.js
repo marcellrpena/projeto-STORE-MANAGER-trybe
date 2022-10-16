@@ -7,7 +7,7 @@ const serviceFindAll = async () => {
   const result = await productsModel.findAll();
   if (result.length > 0) return { message: result, status: statusCode.OK };
   return {
-    message: errorMessages.notFoundData,
+    message: errorMessages.notFoundData('Product'),
     status: statusCode.BAD_REQUEST,
   };
 };
@@ -20,7 +20,7 @@ const serviceFindById = async (productId) => {
   // segundo filtro verifica se o ID existe no banco de dados 
   const result = await productsModel.findById(productId);
   if (result) return { message: result, status: statusCode.OK };
-  return { message: errorMessages.notFoundData, status: statusCode.NOT_FOUND,
+  return { message: errorMessages.notFoundData('Product'), status: statusCode.NOT_FOUND,
   };
 };
 

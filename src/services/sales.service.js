@@ -36,6 +36,26 @@ const insertSaleService = async (product) => {
   return { status: statusCode.CREATED, message: { id, itemsSold: camelize(products) } };
 };
 
+const servicefindSalesById = async (saleId) => {
+  // busca a venda específica por Id
+  const sales = await salesModel.findSaleById(saleId);
+  // verifica se a venda existe no sistema
+  if (sales.length > 0) {
+    return { status: statusCode.OK, message: sales };
+  }
+  return {
+    status: statusCode.NOT_FOUND, message: { message: 'Sale not found' },
+  };
+};
+
+const servicefindAllSales = async () => {
+  // busca todas as vendas
+  const sales = await salesModel.findAllSales();
+  return { status: statusCode.OK, message: sales };
+};
+
 module.exports = {
   insertSaleService,
+  servicefindSalesById,
+  servicefindAllSales,
 };

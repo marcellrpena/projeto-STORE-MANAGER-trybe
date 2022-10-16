@@ -29,7 +29,7 @@ describe('Testando product service', function () {
     it('retorna um erro caso receba um ID inválido', async function () {
       const result = await productsService.serviceFindById('a');
 
-      expect(result.message).to.be.deep.equal(errorMessages.notFoundData);
+      expect(result.message).to.be.deep.equal(errorMessages.notFoundData('Product'));
       expect(result.status).to.be.equal(statusCode.NOT_FOUND);
     });
     it('Caso de falha, service retorna uma menssagem de ERRO e status 404', async function () {
