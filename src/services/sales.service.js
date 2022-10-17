@@ -1,4 +1,3 @@
-const camelize = require('camelize');
 const statusCode = require('../helpers/statusCode');
 const { salesModel, productsModel } = require('../models');
 const { validateSale } = require('./validations/validationsInputValues');
@@ -32,9 +31,8 @@ const insertSaleService = async (product) => {
   await Promise.all(saveSaleProducts(id, product));
   // busca os produtos da venda criada para confirmar a criação
   const products = await salesModel.findSalesProductById(id);
-  console.log(camelize(products));
   // retorna uma mensagem contendo o codigo e os produtos da venda criada
-  return { status: statusCode.CREATED, message: { id, itemsSold: camelize(products) } };
+  return { status: statusCode.CREATED, message: { id, itemsSold: products } };
 };
 
 const servicefindSalesById = async (saleId) => {
