@@ -4,9 +4,9 @@ const { salesModel, productsModel } = require('../models');
 const { validateSale } = require('./validations/validationsInputValues');
 // retorna um array contendo vários insertId
 const saveSaleProducts = (id, product) => product
-  .map(async (value) => {
-    await salesModel.insertProductSaleModel(id, value);
-  });
+    .map(async (value) => {
+      await salesModel.insertProductSaleModel(id, value);
+    });
 
 const findProductById = (product) => product
   .map(async ({ productId }) => {
@@ -32,6 +32,7 @@ const insertSaleService = async (product) => {
   await Promise.all(saveSaleProducts(id, product));
   // busca os produtos da venda criada para confirmar a criação
   const products = await salesModel.findSalesProductById(id);
+  console.log(camelize(products));
   // retorna uma mensagem contendo o codigo e os produtos da venda criada
   return { status: statusCode.CREATED, message: { id, itemsSold: camelize(products) } };
 };

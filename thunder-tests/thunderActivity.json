@@ -4,16 +4,16 @@
     "colId": "history",
     "containerId": "",
     "name": "http://localhost:3000/products",
-    "url": "http://localhost:3000/products/1",
-    "method": "PUT",
+    "url": "http://localhost:3000/sales/",
+    "method": "POST",
     "sortNum": 0,
     "created": "2022-10-12T00:45:29.821Z",
-    "modified": "2022-10-17T14:07:27.237Z",
+    "modified": "2022-10-17T17:36:30.032Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{ \"name\": \"Machado do Thor Stormbreaker\" }",
+      "raw": "[\n  {\n    \"productId\": 1,\n    \"quantity\": 1\n  },\n  {\n    \"productId\": 2,\n    \"quantity\": 5\n  }\n]",
       "form": []
     },
     "tests": []
