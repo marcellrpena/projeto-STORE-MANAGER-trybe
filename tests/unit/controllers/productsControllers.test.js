@@ -73,6 +73,57 @@ describe('Testa controlller de produtos', function () {
       expect(res.json).to.have.been.calledOnceWith(serviceProductInsert);
     });
   });
+  describe('Teste de atualização de produto', function () {
+    it('atualizando um produto com sucesso ', async function () {
+      const res = {};
+      const req = {
+        body: {
+          "name": "Martelo do Batman"
+        },
+        params: { id: '1' }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productsService, 'serviceUpdateProductById').resolves({
+        status: statusCode.OK,
+        message: {
+          "id": 1,
+          "name": "Martelo do Batman"
+        },
+      });
+
+      await productsController.controllerUpdateProductById(req, res);
+
+      expect(res.status).to.have.been.calledOnceWith(statusCode.OK);
+      expect(res.json).to.have.been.calledOnceWith({
+        "id": 1,
+        "name": "Martelo do Batman"
+      });
+    });
+    it('Retornando erro caso o produto não exista no banco de dados ', async function () {
+      const res = {};
+      const req = {
+        body: {
+          "name": "Martelo do Batman"
+        },
+        params: { id: '9999' }
+      };
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      /*sinon.stub(productsService, 'serviceUpdateProductById').resolves({
+        status: statusCode.OK,
+        message: {
+          "id": 1,
+          "name": "Martelo do Batman"
+        },
+      }); */
+
+      await productsController.controllerUpdateProductById(req, res);
+
+      expect(res.status).to.have.been.calledOnceWith(statusCode.NOT_FOUND);
+      expect(res.json).to.have.been.calledOnceWith({ "message": "Product not found" });
+    });
+  });
   afterEach(() => {
     sinon.restore();
   });

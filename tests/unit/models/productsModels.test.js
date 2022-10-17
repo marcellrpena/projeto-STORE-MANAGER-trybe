@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 const sinon = require("sinon");
-const { productsFromDB, createProduct } = require("../mocks/productsModel.mock");
+const { productsFromDB, createProduct, productUpdated } = require("../mocks/productsModel.mock");
 const connection = require("../../../src/models/connection");
 const { productsModel } = require('../../../src/models/index');
 const statusCode = require("../../../src/helpers/statusCode");
@@ -30,6 +30,21 @@ describe('Model de produtos', function () {
       const result = await productsModel.productInsert(createProduct);
       
       expect(result).to.equal(99);
+    });
+  });
+  describe('Atualizando produtos', function () {
+    it('atualiza um produto com sucesso', async function () {
+      sinon.stub(connection, 'execute').resolves(productUpdated);
+
+      const productId = 1;
+      const dataToUpdate = {
+        "name": "Martelo do Batman"
+      };
+
+      const result = await productsModel.productUpdateById(productId, dataToUpdate);
+
+      expect(result[0].affectedRows).to.be.deep.equal(1);
+      expect(result[0].changedRows).to.be.deep.equal(1);
     });
   });
   afterEach(() => {

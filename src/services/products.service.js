@@ -36,8 +36,25 @@ const serviceInsert = async (product) => {
   return { status: statusCode.CREATED, message: newProduct };
 };
 
+const serviceUpdateProductById = async (productId, dataProduct) => {
+  const { name } = dataProduct;
+  const validateBody = validateProduct(dataProduct);
+  if (validateBody.status) return validateBody;
+  // filtro verifica se o ID existe no banco de dados 
+  const result = await productsModel.findById(productId);
+  if (!result) {
+    return {
+      message: errorMessages.notFoundData('Product'), status: statusCode.NOT_FOUND,
+    };
+  }
+  await productsModel.productUpdateById(productId, name);
+  const updatedProduct = await productsModel.findById(productId);
+  return { status: statusCode.OK, message: updatedProduct };
+};
+
 module.exports = {
   serviceFindAll,
   serviceFindById,
   serviceInsert,
+  serviceUpdateProductById,
 };

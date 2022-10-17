@@ -19,8 +19,15 @@ const controllerInsert = async (req, res) => {
   res.status(product.status).json(product.message);
 };
 
+const controllerUpdateProductById = async (req, res) => {
+  const { body, params: { id } } = req;
+  const product = await productsService.serviceUpdateProductById(Number(id), body);
+  res.status(product.status).json(product.message);
+};
+
 module.exports = {
   controllerFindAll,
   controllerFindById,
   controllerInsert,
+  controllerUpdateProductById,
 };

@@ -64,6 +64,30 @@ describe('Testando product service', function () {
       expect(result.message).to.deep.equal(productValidation[1].message);
     });
   });
+  describe('Atualizando produtos', function () {
+    it('caso tudo esteja correto atualiza um produto', async function () {
+      sinon.stub(productsModel, 'productUpdateById').resolves(true);
+      sinon.stub(productsModel, 'findById').resolves(serviceProductInsert)
+
+      const productId = 4;
+      const dataProduct = { name: "Produto x" };
+
+      const result = await productsService.serviceUpdateProductById(productId, dataProduct);
+
+      expect(result.status).to.equal(statusCode.OK);
+      expect(result.message).to.deep.equal(serviceProductInsert);
+    });
+    it('Caso de falha, service retorna uma menssagem de ERRO e status 404', async function () {
+      const productId = 999;
+      const productData = {
+        "name": "Martelo do Batman"
+      }
+      const result = await productsService.serviceUpdateProductById(productId, productData);
+
+      expect(result.message).to.be.deep.equal({ "message": "Product not found" });
+      expect(result.status).to.be.equal(statusCode.NOT_FOUND);
+    });
+  });
   afterEach(() => {
     sinon.restore();
   });
