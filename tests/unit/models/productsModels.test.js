@@ -47,6 +47,17 @@ describe('Model de produtos', function () {
       expect(result[0].changedRows).to.be.deep.equal(1);
     });
   });
+  describe('Deletando produtos', function () {
+    it('deleta um produto com sucesso', async function () {
+      sinon.stub(connection, 'execute').resolves(productUpdated);
+
+      const productId = 1;
+
+      const result = await productsModel.productDelete(productId);
+
+      expect(result[0].affectedRows).to.be.deep.equal(1);
+    });
+  });
   afterEach(() => {
     sinon.restore();
   });

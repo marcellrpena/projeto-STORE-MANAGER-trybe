@@ -88,6 +88,24 @@ describe('Testando product service', function () {
       expect(result.status).to.be.equal(statusCode.NOT_FOUND);
     });
   });
+  describe('Deletando produtos', function () {
+    it('Caso de sucesso, service retorna um codigo http 204', async function () {
+      sinon.stub(productsModel, 'productDelete').resolves(true);
+      sinon.stub(productsModel, 'findById').resolves(true);
+
+      const result = await productsService.serviceDeleteProduct(1);
+
+      expect(result.status).to.be.equal(204);
+    });
+    it('Caso de falha, service retorna uma menssagem de ERRO e status 404', async function () {
+      const productId = 999;
+
+      const result = await productsService.serviceDeleteProduct(productId);
+
+      expect(result.message).to.be.deep.equal({ "message": "Product not found" });
+      expect(result.status).to.be.equal(statusCode.NOT_FOUND);
+    });
+  });
   afterEach(() => {
     sinon.restore();
   });

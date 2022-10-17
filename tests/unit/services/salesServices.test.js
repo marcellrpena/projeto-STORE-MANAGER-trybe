@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const sinon = require("sinon");
 const errorMessages = require("../../../src/helpers/errorMessages");
 const statusCode = require("../../../src/helpers/statusCode");
-const { salesModel } = require("../../../src/models");
+const { salesModel, productsModel } = require("../../../src/models");
 const { salesService } = require("../../../src/services");
 const { requestSale, sucessResultSale, notFoundProduct, productRequired, quantityRequired, invalidQuantity, resultSearchSale, resultSearchSaleById, resultSearchAllSales } = require("../mocks/salesModel.mock");
 
@@ -38,6 +38,7 @@ describe('Testando sales service', function () {
     it('Caso de sucesso, quando cadastrar uma venda nova', async function () {
       sinon.stub(salesModel, 'openNewSale').resolves(3);
       sinon.stub(salesModel, 'insertProductSaleModel').resolves(1);
+      sinon.stub(productsModel, 'findById').resolves(1);
       sinon.stub(salesModel, 'findSalesProductById').resolves(requestSale);
 
       const result = await salesService.insertSaleService(requestSale);

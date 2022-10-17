@@ -52,9 +52,26 @@ const serviceUpdateProductById = async (productId, dataProduct) => {
   return { status: statusCode.OK, message: updatedProduct };
 };
 
+const serviceDeleteProduct = async (productId) => {
+  // primeiro filtro valida se o Id digitado é valido
+  const validationId = validateId(productId);
+  if (validationId.status) return validationId;
+
+  // segundo filtro verifica se o ID existe no banco de dados 
+  const result = await productsModel.findById(productId);
+  if (!result) {
+    return {
+      message: errorMessages.notFoundData('Product'), status: statusCode.NOT_FOUND,
+    };
+  }
+  await productsModel.productDelete(productId);
+  return { status: statusCode.NO_CONTENT };
+};
+  
 module.exports = {
   serviceFindAll,
   serviceFindById,
   serviceInsert,
   serviceUpdateProductById,
+  serviceDeleteProduct,
 };
